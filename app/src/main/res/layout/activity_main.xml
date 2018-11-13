@@ -39,7 +39,7 @@
         android:id="@+id/ledoff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/disconnect"
+        android:layout_alignRight="@+id/disconnect"
         android:layout_alignTop="@+id/ledon"
         android:text="LED off" />
 

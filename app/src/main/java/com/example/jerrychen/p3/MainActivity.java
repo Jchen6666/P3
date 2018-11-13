@@ -32,7 +32,12 @@ public class MainActivity extends Activity
     private byte[] readBuffer;
     private int readBufferIndex;
     private volatile boolean stopListening;
+    private StringBuilder sb = new StringBuilder();
+
     byte[] packetBytes;
+    Handler h;
+    final int RECIEVE_MESSAGE=1;
+    ConnectedThread mConnectedThread;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -41,12 +46,35 @@ public class MainActivity extends Activity
         setContentView(R.layout.activity_main);
 
         Button connectButton = (Button) findViewById(R.id.connect);
-        final Button disconnectButton = (Button) findViewById(R.id.disconnect);
+        Button disconnectButton = (Button) findViewById(R.id.disconnect);
         Button ledOnButton = (Button) findViewById(R.id.ledon);
         Button ledOffButton = (Button) findViewById(R.id.ledoff);
         statusLabel = (TextView) findViewById(R.id.label);
         value = (TextView) findViewById(R.id.textView1);
 
+
+        h=new Handler() {
+            @Override
+            public void handleMessage(android.os.Message msg) {
+                switch (msg.what) {
+                    case RECIEVE_MESSAGE:                                                   // if receive massage
+                        byte[] readBuf = (byte[]) msg.obj;
+                        String strIncom = new String(readBuf, 0, msg.arg1);                 // create string from bytes array
+                        sb.append(strIncom);                                                // append string
+                        int endOfLineIndex = sb.indexOf("\r\n");                            // determine the end-of-line
+                        if (endOfLineIndex > 0) {                                            // if end-of-line,
+                            String sbprint = sb.substring(0, endOfLineIndex);               // extract string
+                            sb.delete(0, sb.length());                                      // and clear
+                            value.setText("Data from Arduino: " + sbprint);            // update TextView
+
+                        }
+                        //Log.d(TAG, "...String:"+ sb.toString() +  "Byte:" + msg.arg1 + "...");
+                        break;
+                }
+            }
+
+            ;
+        };
         // Setting up the "Connect" button
         connectButton.setOnClickListener(new View.OnClickListener()
         {
@@ -70,9 +98,7 @@ public class MainActivity extends Activity
         // Setting up the "Disconnect" button
         disconnectButton.setOnClickListener(new View.OnClickListener()
         {
-
             @Override
-
             public void onClick(View v)
             {
                 try
@@ -90,12 +116,12 @@ public class MainActivity extends Activity
         ledOnButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
-
             public void onClick(View v)
             {
                 try
                 {
                     sendRequest("1");
+                   // mConnectedThread.run();
                 }
                 catch (IOException ex)
                 {
@@ -108,7 +134,6 @@ public class MainActivity extends Activity
         ledOffButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
-
             public void onClick(View v)
             {
                 try
@@ -161,7 +186,6 @@ public class MainActivity extends Activity
                 {
                     btDevice = device;
                     statusLabel.setText("Bluetooth Device '" + device.getName() + "' Found");
-                    Toast.makeText(MainActivity.this,"Bluetooth Device '" + device.getName() + "' Found",Toast.LENGTH_LONG).show();
                     return true;
                 }
             }
@@ -180,6 +204,8 @@ public class MainActivity extends Activity
     {
         UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
         btSocket = btDevice.createRfcommSocketToServiceRecord(uuid);
+        mConnectedThread=new ConnectedThread(btSocket);
+       // mConnectedThread.start();
         btSocket.connect();
         oStream = btSocket.getOutputStream();
         iStream = btSocket.getInputStream();
@@ -296,4 +322,43 @@ public class MainActivity extends Activity
         Toast toast = Toast.makeText(getBaseContext(), message, Toast.LENGTH_SHORT);
         toast.show();
     }
+
+
+private class ConnectedThread extends Thread {
+    private final InputStream mmInStream;
+    private final OutputStream mmOutStream;
+
+    public ConnectedThread(BluetoothSocket socket) {
+        InputStream tmpIn = null;
+        OutputStream tmpOut = null;
+
+        // Get the input and output streams, using temp objects because
+        // member streams are final
+        try {
+            tmpIn = socket.getInputStream();
+            tmpOut = socket.getOutputStream();
+        } catch (IOException e) {
+        }
+
+        mmInStream = tmpIn;
+        mmOutStream = tmpOut;
+    }
+
+    @Override
+    public void run() {
+        byte[] buffer = new byte[256];  // buffer store for the stream
+        int bytes; // bytes returned from read()
+
+        // Keep listening to the InputStream until an exception occurs
+        while (true) {
+            try {
+                // Read from the InputStream
+                bytes = mmInStream.read(buffer);        // Get number of bytes and message in "buffer"
+                h.obtainMessage(RECIEVE_MESSAGE, bytes, -1, buffer).sendToTarget();     // Send to message queue Handler
+            } catch (IOException e) {
+                break;
+            }
+        }
+    }
+}
 }
