@@ -21,7 +21,7 @@ import android.widget.Toast;
 /**
  *
  */
-public class MainActivity extends Activity
+public class TestActivity extends Activity
 {
     private TextView statusLabel, value;
     private BluetoothAdapter myBluetooth;
@@ -43,7 +43,7 @@ public class MainActivity extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_test);
 
         Button connectButton = (Button) findViewById(R.id.connect);
         Button disconnectButton = (Button) findViewById(R.id.disconnect);
