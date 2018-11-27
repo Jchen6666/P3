@@ -13,6 +13,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -51,6 +52,7 @@ public class TestActivity extends Activity
         Button ledOffButton = (Button) findViewById(R.id.ledoff);
         statusLabel = (TextView) findViewById(R.id.label);
         value = (TextView) findViewById(R.id.textView1);
+        //value.setText("Hello");
 
 
         h=new Handler() {
@@ -229,10 +231,14 @@ public class TestActivity extends Activity
             @Override
             public void run()
             {
+                //value.setText("Hello");
+
                 while (!Thread.currentThread().isInterrupted() && !stopListening)
                 {
                     try
                     {
+//                        Log.d("Test","Hello");
+//                        value.setText("Hello");
                         int input = iStream.available();
                         if (input > 0)
                         {
@@ -257,12 +263,18 @@ public class TestActivity extends Activity
                                         public void run()
                                         {
                                             value.setText(data);
+                                            Log.d("Test",data);
+                                        if (!data.equals("")&&Integer.parseInt(data.trim())<150){
+
+                                               Log.d("Test","dangerous");                                         }
                                         }
                                     });
-                                }
+                               }
                                 else
                                 {
                                     readBuffer[readBufferIndex++] = b;
+
+                                    //value.setText(b);
                                 }
                             }
 
