@@ -48,12 +48,12 @@
                     android:text="Connect"
                   />
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/ic_launcher_background"
-                    />
-
+                android:id="@+id/bluetooth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                    android:onClick="buttonConnect"
+             />
 
             </LinearLayout>
 
@@ -78,11 +78,11 @@
                     android:layout_height="wrap_content"
                     android:text="Senstivity"
                     android:textAlignment="center"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/ic_launcher_background"/>
+                <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center_horizontal"-->
+                    <!--android:background="@drawable/ic_launcher_background"/>-->
 
 
             </LinearLayout>
@@ -108,11 +108,11 @@
                     android:layout_height="wrap_content"
                     android:text="Bluetooth"
                     android:textAlignment="center"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/ic_launcher_background"/>
+                <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center_horizontal"-->
+                    <!--android:background="@drawable/ic_launcher_background"/>-->
 
 
             </LinearLayout>
@@ -138,11 +138,11 @@
                     android:layout_height="wrap_content"
                     android:text="Voice instruction"
                     android:textAlignment="center"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/ic_launcher_background"/>
+                <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center_horizontal"-->
+                    <!--android:background="@drawable/ic_launcher_background"/>-->
 
 
             </LinearLayout>
@@ -151,6 +151,12 @@
 
 
     </android.support.v7.widget.GridLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:tint="@android:color/white"
+        />
 
 
 </LinearLayout>
