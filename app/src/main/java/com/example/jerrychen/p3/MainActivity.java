@@ -32,7 +32,9 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity   {
     private SpeechRecognizer mySpeechRecognizer;
     private TextToSpeech mTTS;
-    private boolean connected=false;
+    private com.example.jerrychen.p3.TextToSpeech mTTS2;
+
+    public static boolean connected=false;
     private boolean speakable;
     private static int sensitivity=150;
     private TextView statusLabel, value;
@@ -62,6 +64,8 @@ public class MainActivity extends AppCompatActivity   {
         bluetoothImage=(ImageView)findViewById(R.id.bluetooth);
         bluetoothImage.setBackgroundResource(R.drawable.bluetooth);
         initializeTextToSpeech();
+        mTTS2=new com.example.jerrychen.p3.TextToSpeech(mTTS);
+        mTTS2.initializeTextToSpeech(MainActivity.this);
        initializeSpeechRecognizer();
         fab.setOnClickListener(new View.OnClickListener(){
 
@@ -96,9 +100,9 @@ public class MainActivity extends AppCompatActivity   {
                         if (findArduino()) {
                             try {
                                 connectToArduino();
-                                speak("connected");
+                                mTTS2.speak("connected");
                             }catch (IOException e){
-                                speak("connection failed");
+                                mTTS2.speak("connection failed");
                             }
                         }
                     }
@@ -111,6 +115,25 @@ public class MainActivity extends AppCompatActivity   {
                     }
 
                 }
+                if (result.get(0).toLowerCase().contains("sensitivity")){
+                  //  createToast("sensitivity setting");
+                  //  mTTS2.speak("go on");
+                    if (result.get(0).toLowerCase().contains("change")){
+
+                       // createToast("increase");
+                        int value = Integer.parseInt(result.get(0).replaceAll("[^0-9]", ""));
+                        sensitivity=value;
+                        try {
+                            ArduinoController.sendRequest(oStream,value);
+
+                        }catch (IOException e){
+
+                        }
+
+                    }
+
+                }
+
 
 
             }
@@ -176,27 +199,42 @@ public class MainActivity extends AppCompatActivity   {
     }
 
     private void processResult(String command) {
-        command=command.toLowerCase();
-
-        //to connect arduino
-        if (command.indexOf("connect")!=-1){
-            if (connected == false) {
-                if (findArduino()) {
-                    try {
-                        speak("connecting");
-                        connectToArduino();
-                       // bluetoothImage.setBackgroundResource(R.drawable.bluetooth);
-                        speak("connected");
-                        Toast.makeText(MainActivity.this,"connected",Toast.LENGTH_LONG).show();
-                    } catch (IOException e) {
-                        createToast("CONNECTION FAILED");
-                    }
-                }
-            }
-
+//        command=command.toLowerCase();
+//
+//        //to connect arduino
+//        if (command.indexOf("connect")!=-1){
+//            if (connected == false) {
+//                if (findArduino()) {
+//                    try {
+//                        mTTS2.speak("connecting");
+//                        connectToArduino();
+//                       // bluetoothImage.setBackgroundResource(R.drawable.bluetooth);
+//                        mTTS2.speak("connected");
+//                        Toast.makeText(MainActivity.this,"connected",Toast.LENGTH_LONG).show();
+//                    } catch (IOException e) {
+//                        createToast("CONNECTION FAILED");
+//                    }
+//                }
+//            }
+//
+//
+//        }
+        //to disconnect
+//        if (command.indexOf("disconnect")!=-1){
+//            try
+//            {
+//                disconnectBt();
+//                //  bluetoothImage.setBackgroundResource(R.drawable.ic_launcher_background);
+//                Toast.makeText(MainActivity.this,"disconnected",Toast.LENGTH_LONG).show();
+//            }
+//            catch (IOException ex)
+//            {
+//
+//            }
+//        }
+        if (command.indexOf("sensitivity")!=-1){
 
         }
-        //to disconnect
     }
 
     private void initializeTextToSpeech() {
@@ -279,12 +317,10 @@ public class MainActivity extends AppCompatActivity   {
         btSocket.connect();
         oStream = btSocket.getOutputStream();
         iStream = btSocket.getInputStream();
-        speak("connecting");
+        mTTS2.speak("connecting");
         ackListener();
-         sendRequest(sensitivity);
-       // sendRequest(150);
+         ArduinoController.sendRequest(oStream,sensitivity);
         connected=true;
-   //     statusLabel.setText("Bluetooth connection established");
     }
 
     /**
@@ -339,7 +375,8 @@ public class MainActivity extends AppCompatActivity   {
                                             if (!data.equals("")&&Integer.parseInt(data.trim())<150){
 
                                                 Log.d("Test",data+"dangerous");
-                                                speak("warning");
+                                                //speak("warning");
+                                                mTTS2.speak("warning");
                                             }
                                         }
                                     });
@@ -372,20 +409,7 @@ public class MainActivity extends AppCompatActivity   {
         thread.start();
     }
 
-    /**
-     * This method sends some input data over the established Bluetooth connection.
-     *
-     * @param input the data to be sent over Bluetooth.
-     * @throws IOException
-     */
-    private void sendRequest(String input) throws IOException
-    {
-        oStream.write(input.getBytes());
-      //  statusLabel.setText("Request Sent");
-    }
-    private void sendRequest(int input)throws IOException{
-        oStream.write(input);
-    }
+
 
     /**
      * Stops the feedback-listening thread and closes sockets and streams.
@@ -399,7 +423,7 @@ public class MainActivity extends AppCompatActivity   {
         iStream.close();
         btSocket.close();
         connected=false;
-        speak("disconnected");
+       // speak("disconnected");
      //   statusLabel.setText("Bluetooth Disconnected");
     }
 
@@ -413,11 +437,7 @@ public class MainActivity extends AppCompatActivity   {
         Toast toast = Toast.makeText(getBaseContext(), message, Toast.LENGTH_SHORT);
         toast.show();
     }
-    private void speak(final String s){
-if (!mTTS.isSpeaking()) {
-    mTTS.speak(s, TextToSpeech.QUEUE_FLUSH, null);
-}
-    }
+
     public void buttonConnect(View view) {
         if (connected == false) {
             if (findArduino()) {
@@ -426,8 +446,8 @@ if (!mTTS.isSpeaking()) {
                   //  bluetoothImage.setBackgroundResource(R.drawable.bluetooth);
                     Toast.makeText(MainActivity.this,"connected",Toast.LENGTH_LONG).show();
                 } catch (IOException e) {
-                    speak("connection failed");
-                    createToast("CONNECTION FAILED");
+                   mTTS2.speak("connection failed");
+                   createToast("CONNECTION FAILED");
                 }
             }
         }else {
