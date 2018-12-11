@@ -3,15 +3,15 @@ package com.example.jerrychen.p3;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,9 +33,9 @@ public class MainActivity extends AppCompatActivity   {
     private SpeechRecognizer mySpeechRecognizer;
     private TextToSpeech mTTS;
     private com.example.jerrychen.p3.TextToSpeech mTTS2;
-
     public static boolean connected=false;
-    private boolean speakable;
+    private Vibrator v;
+    private boolean speakable,vibration;
     private static int sensitivity=150;
     private TextView statusLabel, value;
     private BluetoothAdapter myBluetooth;
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity   {
     private int readBufferIndex;
     private volatile boolean stopListening;
     private StringBuilder sb = new StringBuilder();
-    ImageView bluetoothImage;
+    ImageView bluetoothImage,vibrationImage,voiceIntroImage;
     byte[] packetBytes;
     Handler h;
   //  final int RECIEVE_MESSAGE=1;
@@ -58,13 +58,18 @@ public class MainActivity extends AppCompatActivity   {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        v=(Vibrator) MainActivity.this.getSystemService(Context.VIBRATOR_SERVICE);
         fab=findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_mic_black_24dp);
 
         bluetoothImage=(ImageView)findViewById(R.id.bluetooth);
-        bluetoothImage.setBackgroundResource(R.drawable.bluetooth);
+        vibrationImage=findViewById(R.id.vibration);
+        voiceIntroImage=findViewById(R.id.voice_intro);
+        bluetoothImage.setBackgroundResource(R.drawable.bluetooth_off);
+        vibrationImage.setBackgroundResource(R.drawable.vibration_off);
+        voiceIntroImage.setBackgroundResource(R.drawable.voice_off);
         initializeTextToSpeech();
-        mTTS2=new com.example.jerrychen.p3.TextToSpeech(mTTS);
+        mTTS2=new com.example.jerrychen.p3.TextToSpeech(mTTS,speakable);
         mTTS2.initializeTextToSpeech(MainActivity.this);
        initializeSpeechRecognizer();
         fab.setOnClickListener(new View.OnClickListener(){
@@ -377,6 +382,7 @@ public class MainActivity extends AppCompatActivity   {
                                                 Log.d("Test",data+"dangerous");
                                                 //speak("warning");
                                                 mTTS2.speak("warning");
+                                                v.vibrate(1000);
                                             }
                                         }
                                     });

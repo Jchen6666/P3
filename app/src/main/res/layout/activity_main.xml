@@ -16,8 +16,25 @@
             android:textColor="@android:color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="BlindSight"/>
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="BlindSight"
+            android:textSize="19dp"
+            />
+        <Switch
+            android:id="@+id/ProMode"
+            android:text="Pro Mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:switchPadding="5dp"
+
+
+            />
     </RelativeLayout>
     <android.support.v7.widget.GridLayout
         app:columnCount="2"
@@ -45,15 +62,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Connect"
-                  />
+                    android:text="Bluetooth"
+                    />
                 <ImageView
-                android:id="@+id/bluetooth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                    android:id="@+id/bluetooth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:onClick="buttonConnect"
-             />
+                    />
+
 
             </LinearLayout>
 
@@ -78,11 +96,12 @@
                     android:layout_height="wrap_content"
                     android:text="Senstivity"
                     android:textAlignment="center"/>
-                <!--<ImageView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_gravity="center_horizontal"-->
-                    <!--android:background="@drawable/ic_launcher_background"/>-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:text="kk"
+                    android:layout_height="wrap_content"
+
+                    />
 
 
             </LinearLayout>
@@ -106,13 +125,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Bluetooth"
+                    android:text="Vibration"
                     android:textAlignment="center"/>
-                <!--<ImageView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_gravity="center_horizontal"-->
-                    <!--android:background="@drawable/ic_launcher_background"/>-->
+                <ImageView
+                    android:id="@+id/vibration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    />
 
 
             </LinearLayout>
@@ -138,11 +158,12 @@
                     android:layout_height="wrap_content"
                     android:text="Voice instruction"
                     android:textAlignment="center"/>
-                <!--<ImageView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_gravity="center_horizontal"-->
-                    <!--android:background="@drawable/ic_launcher_background"/>-->
+                <ImageView
+                    android:id="@+id/voice_intro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    />
 
 
             </LinearLayout>

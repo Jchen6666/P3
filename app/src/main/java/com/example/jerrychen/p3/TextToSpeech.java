@@ -8,7 +8,8 @@ import java.util.Locale;
 public class TextToSpeech {
     private boolean speakable;
     private android.speech.tts.TextToSpeech mTTS;
-    public TextToSpeech(android.speech.tts.TextToSpeech mTTS){
+    public TextToSpeech(android.speech.tts.TextToSpeech mTTS,boolean speakable){
+        this.speakable=speakable;
         this.mTTS=mTTS;
     }
     public void initializeTextToSpeech(Context c) {
