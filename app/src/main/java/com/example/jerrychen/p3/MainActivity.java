@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity   {
         initializeTextToSpeech();
         mTTS2=new com.example.jerrychen.p3.TextToSpeech(mTTS,speakable);
         mTTS2.initializeTextToSpeech(MainActivity.this);
-       initializeSpeechRecognizer();
+     //  initializeSpeechRecognizer();
         fab.setOnClickListener(new View.OnClickListener(){
 
             @Override

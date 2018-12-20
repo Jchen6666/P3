@@ -18,7 +18,8 @@ public class TextToSpeech {
             public void onInit(int status) {
                 if (status== android.speech.tts.TextToSpeech.SUCCESS){
                     int result= mTTS.setLanguage(Locale.ENGLISH);
-                    if (result== android.speech.tts.TextToSpeech.LANG_MISSING_DATA|| result== android.speech.tts.TextToSpeech.LANG_NOT_SUPPORTED){
+                    if (result== android.speech.tts.TextToSpeech.LANG_MISSING_DATA|| result== android.speech.tts.TextToSpeech.LANG_NOT_SUPPORTED)
+                    {
                         speakable=false;
                         Log.d("TTS","not supported");
                     }else {
